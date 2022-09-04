@@ -3,9 +3,9 @@
     public class Sale
     {
         private int id;
-        private string comments;
+        //private string comments;
 
         public int Id { get; set; }
-        public string Comments { get; set; }
+        //public string? Comments { get; set; }
     }
 }

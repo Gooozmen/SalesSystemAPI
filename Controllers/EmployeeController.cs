@@ -25,7 +25,7 @@ namespace SalesSystemAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetNameByID")]
+        [Route("GetNameById")]
         public string GetNameByID(int id)
         {
             try
@@ -55,46 +55,8 @@ namespace SalesSystemAPI.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("UpdateEmployee")]
-        public bool Put([FromBody] PutEmployee employee)
-        {
-            try
-            {
-                return EmployeeHandler.Update(new Employee
-                {
-                    Id = employee.Id,
-                    Name = employee.Name,
-                    LastName = employee.LastName,
-                    LogOnCredential = employee.LogOnCredential,
-                    Password = employee.Password,
-                    Mail = employee.Mail,
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
-
-        [HttpDelete]
-        [Route("DeleteEmployee")]
-        public bool Delete([FromBody] int id)
-        {
-            try
-            {
-                return EmployeeHandler.Delete(id);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
-
         [HttpPost]
-        [Route("CreateEmployee")]
+        [Route("Create")]
         public bool Post([FromBody] PostEmployee employee)
         {
             try
@@ -127,6 +89,44 @@ namespace SalesSystemAPI.Controllers
                     Password = employee.Password,
                 });
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        [HttpPut]
+        [Route("Update")]
+        public bool Put([FromBody] PutEmployee employee)
+        {
+            try
+            {
+                return EmployeeHandler.Update(new Employee
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    LastName = employee.LastName,
+                    LogOnCredential = employee.LogOnCredential,
+                    Password = employee.Password,
+                    Mail = employee.Mail,
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public bool Delete([FromBody] int id)
+        {
+            try
+            {
+                return EmployeeHandler.Delete(id);
             }
             catch (Exception ex)
             {

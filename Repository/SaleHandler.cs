@@ -22,7 +22,6 @@ namespace SalesSystemAPI.Repository
                     using (SqlCommand sqlCommand = new SqlCommand(queryInsert, sqlConnection))
                     {
                         int numberOfRows = sqlCommand.ExecuteNonQuery();
-
                         if (numberOfRows > 0)
                         {
                             createdSale = GetMostRecentSale();
@@ -48,9 +47,12 @@ namespace SalesSystemAPI.Repository
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand("SELECT MAX(Id) FROM Sale", connection))
+                    string querySelect = "SELECT TOP 1 Id FROM Sale ORDER BY Id DESC";
+                   
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(querySelect, connection))
                     {
-                        connection.Open();
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
@@ -59,6 +61,8 @@ namespace SalesSystemAPI.Repository
                                 while (reader.Read())
                                 {
                                     sale.Id = Convert.ToInt32(reader["Id"]);
+
+                                    //sale.Comments = Convert.ToString(reader["Comments"]);
                                 }
                             }
                         }
@@ -67,34 +71,49 @@ namespace SalesSystemAPI.Repository
                 }
                 return sale.Id;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return 0;
             }
         }
 
-        //empleado que efectua la venta no es un dato relevante
-        //para la tabla venta o producto vendido
-        public static bool LoadSoldProducts(List<SoldProduct> products)
+        public static bool Delete(int id)
         {
             bool result = false;
             try
             {
-                int createdSale = SaleHandler.Create();
-
-                foreach (SoldProduct item in products)
+                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    SoldProductHandler.Create(item,createdSale);
-                    SoldProductHandler.DecreaseProductStock(item);
-                }
+                    SoldProductHandler.DeleteBySaleId(id);
 
+                    string queryDeleteSale = "DELETE Sale WHERE Id = @Id";
+
+                    SqlParameter parameterSaleId = new SqlParameter("Id", System.Data.SqlDbType.Int) { Value = id};
+
+                    sqlConnection.Open();
+
+                    using (SqlCommand sqlCommand = new SqlCommand(queryDeleteSale, sqlConnection))
+                    {
+                        sqlCommand.Parameters.Add(parameterSaleId);
+
+                        int numberOfRows = sqlCommand.ExecuteNonQuery();
+
+                        if (numberOfRows > 0)
+                        {
+                            result = true;
+                        }
+                    }
+                    sqlConnection.Close();
+                }
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return result;
             }
         }
+
     }
 }

@@ -6,7 +6,6 @@ namespace SalesSystemAPI.Repository
     public static class EmployeeHandler
     {
         public const string connectionString = "Server=LAPTOP-SL2QNK3P ;Database=SalesSystem ;Trusted_Connection=True;";
-
         public static bool Update(Employee employee)
         {
             bool result = false;
@@ -53,7 +52,6 @@ namespace SalesSystemAPI.Repository
                 return result;
             }
         }
-
         public static bool Delete(int id)
         {
             bool result = false;
@@ -87,7 +85,6 @@ namespace SalesSystemAPI.Repository
                 return result;
             }
         }
-
         public static List<Employee> Read()
         {
             List<Employee> employees = new List<Employee>();
@@ -131,7 +128,6 @@ namespace SalesSystemAPI.Repository
                 return employees;
             }
         }
-
         public static bool Create(Employee employee)
         {
             bool result = false;
@@ -179,7 +175,6 @@ namespace SalesSystemAPI.Repository
                 return result;
             }
         }
-
         public static bool LogIn(Employee employee)
         {
             bool loginState = false;
@@ -228,7 +223,6 @@ namespace SalesSystemAPI.Repository
                 return false;
             }
         }
-    
         public static Employee GetById(int id)
         {
             Employee employee = new Employee();

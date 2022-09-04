@@ -7,41 +7,36 @@ namespace SalesSystemAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SaleController
+    public class SoldProductController : ControllerBase
     {
-        [HttpPost]
-        [Route("CreateSale")]
-        public bool post([FromBody] PostSoldProduct soldProduct)
+        [HttpGet]
+        [Route("GetSoldProducts")]
+        public List<SoldProductInfo> Get()
         {
             try
             {
-
-                return SoldProductHandler.Create(new SoldProduct
-                {
-                    ProductId = soldProduct.ProductId,
-                    Stock = soldProduct.Stock,
-                    SaleId = soldProduct.SaleId,
-                });
+                return SoldProductHandler.GetProducts();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                return null;
             }
         }
 
-        [HttpDelete]
-        [Route("Delete")]
-        public bool Delete(int id)
+        [HttpGet]
+        [Route("GetSoldProductById")]
+        public SoldProductInfo GetById(int id)
         {
             try
             {
-                return SaleHandler.Delete(id);
+                SoldProductInfo soldProductInfo = SoldProductHandler.GetById(id);
+                return soldProductInfo;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                return null;
             }
         }
     }

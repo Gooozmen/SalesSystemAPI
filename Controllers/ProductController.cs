@@ -10,7 +10,23 @@ namespace SalesSystemAPI.Controllers
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
-        [HttpPost(Name = "CreateProduct")]
+        [HttpGet]
+        [Route("GetAll")]
+        public List<Product> Get()
+        {
+            try
+            {
+                return ProductHandler.Read();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [Route("Create")]
         public bool Post([FromBody] PostProduct product)
         {
             try
@@ -31,12 +47,13 @@ namespace SalesSystemAPI.Controllers
             }
         }
 
-        [HttpPut(Name = "UpdateProduct")]
+        [HttpPut]
+        [Route("Update")]
         public bool Put([FromBody] PutProduct product)
         {
             try
             {
-                return ProductHandler.Create(new Product
+                return ProductHandler.Update(new Product
                 {
                     Id = product.Id,
                     Descriptions = product.Descriptions,
@@ -53,6 +70,20 @@ namespace SalesSystemAPI.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("Delete")]
+        public bool Delete([FromBody] int id)
+        {
+            try
+            {
+                return ProductHandler.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
 
     }
 }
