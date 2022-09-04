@@ -228,5 +228,50 @@ namespace SalesSystemAPI.Repository
                 return false;
             }
         }
+    
+        public static Employee GetById(int id)
+        {
+            Employee employee = new Employee();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string querySearchAll = "SELECT * FROM Employee WHERE Id = @id";
+
+                    SqlParameter parameterEmployeeId = new SqlParameter("id", System.Data.SqlDbType.BigInt) { Value = id };
+
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(querySearchAll, connection))
+                    {
+                        command.Parameters.Add(parameterEmployeeId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    employee.Id = Convert.ToInt32(reader["Id"]);
+                                    employee.Name = Convert.ToString(reader["Name"]);
+                                    employee.LastName = Convert.ToString(reader["LastName"]);
+                                    employee.LogOnCredential = Convert.ToString(reader["LogOnCredential"]);
+                                    employee.Password = Convert.ToString(reader["Password"]);
+                                    employee.Mail = Convert.ToString(reader["Mail"]);
+
+                                }
+                            }
+                        }
+                        connection.Close();
+                    }
+                }
+                return employee;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return employee;
+            }
+        }
     }
 }
